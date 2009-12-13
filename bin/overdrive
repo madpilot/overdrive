@@ -1,18 +1,19 @@
 #!/usr/bin/env ruby
-$:.unshift File.join(File.dirname(__FILE__), 'lib')
+$:.unshift File.join(File.dirname(File.expand_path(__FILE__)), '..', 'lib')
 
+require 'rubygems'
 require 'daemons'
 require 'options'
-require 'feeds'
-require 'plugins'
+require 'feed'
+require 'torrent'
+require 'lexicon'
+require 'dsl'
 
 options = Options.parse
 
 Daemons.call(options) do
   @last_run = nil
-  @feed = Feeds.new(options)
-  @filter_plugins = Plugins.load_filters(options)
-  @post_processing_plugins = Plugins.load_post_processors(options)
+  @feed = Feed.new(options)
 
   loop {
     if @last_run == nil || @last_run >= DateTime.now + (options[:interval] * 60)

@@ -14,7 +14,7 @@ class Options
         options[:verbose] = true
       end
 
-      options[:config_file] = File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'feeds.yaml'))
+      options[:config_file] = File.join(File.dirname(File.expand_path(__FILE__)), '..', 'config', 'feeds.yaml')
       opts.on('-c', '--config', 'Path to the config YAML file') do |config_file|
         options[:config_file] = config_file
       end
