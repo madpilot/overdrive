@@ -9,10 +9,16 @@ class DSL
     @titles = []
     # Read in the filter file
     File.open(@options[:filter], 'r') do |fh|
+      contents = fh.read
       eval <<-END
-        def run(items)
+        def perform_filter(items)
           @items = items
-          #{fh.read}
+          #{contents}
+         end
+
+         def download_complete(torrents)
+          @torrents = torrents
+          #{contents}
          end
        END
     end
@@ -26,12 +32,16 @@ class DSL
     Lexicon.parse(item) 
   end
 
-  def log(str)
-    puts str if @options[:verbose]
+  def log
+    @options[:logger]
   end
 
-  def download(link)
-    Torrent.download(link) 
+  def options
+    @options
+  end
+
+  def download(link, options = {})
+    Torrent.download(link, options) 
   end
 
   def filter &block
@@ -39,6 +49,6 @@ class DSL
   end
 
   def after &block
-    @items.each { |item| yield(item) }
+    @torrents.each { |torrent| yield(torrent) }
   end
 end

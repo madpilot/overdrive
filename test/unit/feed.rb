@@ -8,8 +8,9 @@ class FeedTest < Test::Unit::TestCase
       @dsl = mock()
       DSL.stubs(:new).returns(@dsl)
 
-      yaml = File.join(File.dirname(File.expand_path(__FILE__)), '..', 'feed.yaml')
+      yaml = File.join(File.dirname(File.expand_path(__FILE__)), '..', 'config', 'settings.yaml')
       @config = YAML.load_file(yaml)
+      @config[:on_top] = true
       @feed = Feed.new({ :config_file => yaml })
       FakeWeb.register_uri(:get, "http://www.mytorrentsite.com/feed.rss", :body => bitme_rss)
     end

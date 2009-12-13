@@ -2,23 +2,32 @@
 $:.unshift File.join(File.dirname(File.expand_path(__FILE__)), '..', 'lib')
 
 require 'rubygems'
+require 'syslog_logger'
 require 'daemons'
 require 'options'
 require 'feed'
 require 'torrent'
 require 'lexicon'
 require 'dsl'
+require 'transmission-client'
 
 options = Options.parse
+
+if options[:ontop]
+  options[:logger] = Logger.new(STDOUT)
+else
+  options[:logger] = SyslogLogger.new('overdrive')
+end
 
 Daemons.call(options) do
   @last_run = nil
   @feed = Feed.new(options)
 
+  options[:logger].info("Running every #{options[:interval].to_s} minutes")
   loop {
-    if @last_run == nil || @last_run >= DateTime.now + (options[:interval] * 60)
+    if @last_run == nil || (@last_run.to_i + options[:interval] * 60) <= Time.now.to_i
       @feed.check
-      @last_run = DateTime.now
+      @last_run = Time.now
     end
     sleep(1)
   }

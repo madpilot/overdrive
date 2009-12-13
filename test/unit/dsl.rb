@@ -5,7 +5,7 @@ class DslTest < Test::Unit::TestCase
   
   context '' do
     setup do
-      yaml = File.join(File.dirname(File.expand_path(__FILE__)), '..', 'feed.yaml')
+      yaml = File.join(File.dirname(File.expand_path(__FILE__)), '..', 'config', 'settings.yaml')
       @config = YAML.load_file(yaml)
       @feed = Feed.new({ :config_file => yaml })
       FakeWeb.register_uri(:get, "http://www.mytorrentsite.com/feed.rss", :body => bitme_rss)
@@ -13,8 +13,12 @@ class DslTest < Test::Unit::TestCase
    end
 
     context 'filters' do
-      should 'define run dynamically' do
-        assert @dsl.respond_to?(:run) 
+      should 'define perform_filter dynamically' do
+        assert @dsl.respond_to?(:perform_filter) 
+      end
+
+      should 'define download_complete dynamically' do
+        assert @dsl.respond_to?(:download_complete)
       end
     end
 

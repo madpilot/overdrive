@@ -6,7 +6,7 @@ class LexiconTest < Test::Unit::TestCase
   context '' do
     setup do
       @item = mock
-      @item.stubs(:pubDate).returns(DateTime.now)
+      @item.stubs(:published).returns(DateTime.now)
     end
 
     should 'parse dollhouse.s02e08.internal.hdtv.xvid-2hd.avi' do
@@ -66,6 +66,46 @@ class LexiconTest < Test::Unit::TestCase
       assert_equal 'National Geographic Inside The Pentagon', parsed[:title]
       assert_equal nil, parsed[:series]
       assert_equal nil, parsed[:episode]
+      assert !parsed[:high_def]     
+    end
+
+    should 'parse i.want.to.work.for.diddy.206.hdtv.xvid-sys.avi' do
+      @item.stubs(:title).returns('i.want.to.work.for.diddy.206.hdtv.xvid-sys.avi')
+      
+      parsed = Lexicon::parse(@item)
+      assert_equal 'i want to work for diddy', parsed[:title]
+      assert_equal 2, parsed[:series]
+      assert_equal 6, parsed[:episode]
+      assert parsed[:high_def]     
+    end
+
+    should 'parse Dollhouse S02E08 [reencode] [internal] [2hd] [iPod].mp4' do
+      @item.stubs(:title).returns('Dollhouse S02E08 [reencode] [internal] [2hd] [iPod].mp4')
+
+      parsed = Lexicon::parse(@item)
+      assert_equal 'Dollhouse', parsed[:title]
+      assert_equal 2, parsed[:series]
+      assert_equal 8, parsed[:episode]
+      assert !parsed[:high_def]     
+    end
+  
+    should 'parse The.Jeff.Dunham.Show.S01.E06.HDTV.XviD-RNR.avi' do
+      @item.stubs(:title).returns('The.Jeff.Dunham.Show.S01.E06.HDTV.XviD-RNR.avi')
+
+      parsed = Lexicon::parse(@item)
+      assert_equal 'The Jeff Dunham Show', parsed[:title]
+      assert_equal 1, parsed[:series]
+      assert_equal 6, parsed[:episode]
+      assert parsed[:high_def]     
+    end
+
+    should 'parse Mouth To Mouth.1x04.Devine.REPACK.WS PDTV XviD-FoV' do
+      @item.stubs(:title).returns('Mouth To Mouth.1x04.Devine.REPACK.WS PDTV XviD-FoV')
+
+      parsed = Lexicon::parse(@item)
+      assert_equal 'Mouth To Mouth', parsed[:title]
+      assert_equal 1, parsed[:series]
+      assert_equal 4, parsed[:episode]
       assert !parsed[:high_def]     
     end
   end
