@@ -1,5 +1,5 @@
 require 'open-uri'
-require "base64"
+require 'base64'
 
 class Torrent
   include OpenURI::OpenRead

@@ -5,6 +5,7 @@ class Feed
   def initialize(options)
     @options = options
     @feeds = YAML.load_file(@options[:config_file])
+    @plugins = DSL.new(@options)
   end
 
   def check
@@ -13,13 +14,10 @@ class Feed
   end
 
   def check_feeds
-    @plugins = DSL.new(@options)
-
     number_processed = 0
     @feeds['feeds'].each do |feed|
       begin
         @options[:logger].info "Fetching #{feed['url']}" if @options[:verbose]
-        
         rss = Feedzirra::Feed.fetch_and_parse(feed['url'])
         @options[:logger].info "Processing #{feed['url']}" if @options[:verbose]
         @plugins.perform_filter(rss.entries)
