@@ -41,7 +41,7 @@ class DSL
   end
 
   def download(link, options = {})
-    Torrent.download(link, options) 
+    Torrent.download(link, options, @options) 
   end
 
   def filter &block
