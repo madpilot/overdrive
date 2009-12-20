@@ -14,13 +14,13 @@ class Options
         options[:verbose] = true
       end
 
-      options[:config_file] = File.join(File.dirname(File.expand_path(__FILE__)), '..', 'config', 'settings.yaml')
-      opts.on('-c [config]', '--config [config]', /.+/, 'Path to the config YAML file') do |config_file|
-        options[:config_file] = config_file
+      options[:dry_run] = false
+      opts.on('-d', '--dry-run', "Don't actually queue torrents up") do |dry_run|
+        options[:dry_run] = true
       end
 
       options[:interval] = 15
-      opts.on('-i [n]', '--interval [n]', /\d+/, 'Number of minutes between checks') do |interval|
+      opts.on('-i [n]', '--interval [n]', /\d+/, 'Number of minutes between checks (Default: 15)') do |interval|
         options[:interval] = interval.to_i
       end
 
@@ -35,12 +35,12 @@ class Options
       end
 
       options[:transmission_server] = 'localhost'
-      opts.on('-s [server]', '--transmission_server [server]', /.+/, 'Address of the transmission server') do |server|
+      opts.on('-s [server]', '--transmission_server [server]', /.+/, 'Address of the transmission server (Default: localhost)') do |server|
         options[:transmission_server] = server
       end
 
       options[:transmission_port] = 9091
-      opts.on('-p', '--transmission_port', /\d+/, 'Posrt of the transmission server') do |port|
+      opts.on('-p [port]', '--transmission_port', /\d+/, 'Port of the transmission server (Default: 9091)') do |port|
         options[:transmission_port] = port.to_i
       end
     end

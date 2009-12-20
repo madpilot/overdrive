@@ -1,5 +1,11 @@
 class Lexicon
   def self.parse(item)
+    if item.is_a?(String)
+      title = item
+    else
+      title = item.title
+    end
+    
     parsed = {
       :title => nil,
       :series => nil,
@@ -9,8 +15,8 @@ class Lexicon
       :high_def => false
     }
 
-    tokens = item.title.split(/\.| /)
-    title = []
+    tokens = title.split(/\.| /)
+    titles = []
     state = :title
     
     while tokens.length > 0
@@ -30,7 +36,7 @@ class Lexicon
           parsed[:series] = Regexp.last_match[1].to_i
           state = :series
         else
-          title << token
+          titles << token
         end
       when :series
         if token =~ /^e(\d+)$/i
@@ -46,8 +52,8 @@ class Lexicon
 
     # Reparse to look for some hd/sd info
     if state != :done
-      tokens = item.title.split(/\.| /)
-      title = [] if state == :title
+      tokens = title.split(/\.| /)
+      titles = [] if state == :title
       
       while tokens.length > 0
         token = tokens.shift
@@ -57,7 +63,7 @@ class Lexicon
             parsed[:high_def] = true
             state = :done
           else
-            title << token
+            titles << token
           end
         when :series
           if token =~ /HDTV|720p|1080|mkv/i
@@ -70,8 +76,8 @@ class Lexicon
 
     # Try to split on some common lines
     if state != :done
-      tokens = item.title.split(/\.| /)
-      title = [] if state == :title
+      tokens = title.split(/\.| /)
+      titles = [] if state == :title
       
       while tokens.length > 0
         token = tokens.shift
@@ -82,7 +88,7 @@ class Lexicon
           elsif token =~ /avi|ts|mkv|mpg/i
             state = :done
           else
-            title << token
+            titles << token
           end
         when :series
           if token =~ /vid|DVDRip|xvid|divx|repack|internal/i
@@ -95,10 +101,10 @@ class Lexicon
     end
 
     if state == :title
-      title = item.title.split(/\.| /)
+      titles = title.split(/\.| /)
     end
 
-    parsed[:title] = title.join(' ')
+    parsed[:title] = titles.join(' ')
     parsed[:publish_date] = item.published if item.published
     return parsed
   end

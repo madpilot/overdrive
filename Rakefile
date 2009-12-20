@@ -12,6 +12,7 @@ begin
     
     s.add_dependency 'daemons'
     s.add_dependency 'transmission-client'
+    s.add_dependency 'SyslogLogger'
   end
 rescue LoadError
   puts "Jeweler, or one of its dependencies, is not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"

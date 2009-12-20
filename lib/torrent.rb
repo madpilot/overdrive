@@ -5,6 +5,8 @@ class Torrent
   include OpenURI::OpenRead
 
   def self.download(link, http_options = {}, options = {})
+    return if options[:dry_run]
+
     uri = URI.parse(link)
     download_dir = http_options.delete(:download_dir)
     torrent = uri.read(http_options)

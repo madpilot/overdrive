@@ -5,27 +5,51 @@ class DSL
 
   def initialize(options)
     @options = { :filter => File.join(File.dirname(File.expand_path(__FILE__)), '..', 'filter.rb') }.merge(options)
-
-    @titles = []
-    # Read in the filter file
+    @items, @torrents, @feeds, @titles = [], [], [], []
+    
     File.open(@options[:filter], 'r') do |fh|
       contents = fh.read
       eval <<-END
-        def perform_filter(items)
-          @items = items
-          #{contents}
-         end
+        def run_dsl(obj = nil, type = nil)
+          @items = []
+          @torrents = []
 
-         def download_complete(torrents)
-          @torrents = torrents
+          case(type)
+          when :filter
+            @items = obj
+          when :torrent
+            @torrents = obj
+          end
+          
           #{contents}
-         end
+        end
        END
     end
+
+    # Prime the DSL
+    @primed = false
+    run_dsl
+    @primed = true
   end
- 
+
+  def perform_filter(items)
+    run_dsl(items, :filter)
+  end
+
+  def download_complete(torrents)
+    run_dsl(torrents, :torrent)
+  end
+
+  def add_feed(feed)
+    @feeds << feed unless @primed
+  end
+
+  def feeds
+    @feeds
+  end
+
   def add_title(title)
-    @titles << title
+    @titles << title unless @primed
   end
 
   def parse_metadata(item)
@@ -33,7 +57,7 @@ class DSL
   end
 
   def log
-    @options[:logger]
+    options[:logger]
   end
 
   def options
@@ -41,7 +65,7 @@ class DSL
   end
 
   def download(link, options = {})
-    Torrent.download(link, options, @options) 
+    Torrent.download(link, options, self.options) 
   end
 
   def filter &block
