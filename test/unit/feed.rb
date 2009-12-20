@@ -42,6 +42,7 @@ class FeedTest < Test::Unit::TestCase
     context 'update_feed' do
       should 'do nothing if there is no updated entries' do
         feed = Feedzirra::Feed.parse(bitme_rss)
+        @feed.instance_variable_set(:@results, feed.entries)
         Feedzirra::Feed.stubs(:update).returns(feed)
         Feedzirra::Feed.stubs(:updated?).returns(false)
         Feedzirra::Feed.stubs(:new_entries).returns([])
