@@ -4,27 +4,36 @@ class DSL
   attr_accessor :titles
 
   def initialize(options)
-    @options = { :filter => File.join(File.dirname(File.expand_path(__FILE__)), '..', 'filter.rb') }.merge(options)
+    @options = options
     @items, @torrents, @feeds, @titles = [], [], [], []
     
-    File.open(@options[:filter], 'r') do |fh|
-      contents = fh.read
-      eval <<-END
-        def run_dsl(obj = nil, type = nil)
-          @items = []
-          @torrents = []
-
-          case(type)
-          when :filter
-            @items = obj
-          when :torrent
-            @torrents = obj
-          end
-          
-          #{contents}
+    contents = ''
+    options[:filter_paths].each do |path|
+      begin
+        File.open(path, 'r') do |fh|
+          @options[:logger].info "Adding #{path} to recipe list"
+          contents += fh.read
         end
-       END
+      rescue => e
+        @options[:logger].info "Couldn't add #{path} to recipe list: #{e}"
+      end
     end
+
+    eval <<-END
+      def run_dsl(obj = nil, type = nil)
+        @items = []
+        @torrents = []
+
+        case(type)
+        when :filter
+          @items = obj
+        when :torrent
+          @torrents = obj
+        end
+        
+        #{contents}
+      end
+    END
 
     # Prime the DSL
     @primed = false

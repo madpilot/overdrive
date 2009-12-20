@@ -10,7 +10,7 @@ class Options
       opts.banner = "Usage: #{opts.program_name} [options]"
 
       options[:verbose] = false
-      opts.on('-v', '--verbose', 'Be more verbose') do
+      opts.on('-V', '--verbose', 'Be more verbose') do
         options[:verbose] = true
       end
 
@@ -34,7 +34,7 @@ class Options
         options[:ontop] = true
       end
 
-      options[:filter_paths] = [ File.join(File.dirname(__FILE__), '..', 'recipe.rb'), File.join('etc', 'overdrive.rb'), File.join('var' , 'transmission' , 'config' , 'overdrive.rb') ]
+      options[:filter_paths] = [ File.join('', File.dirname(__FILE__), '..', 'recipe.rb'), File.join('', 'etc', 'overdrive.rb'), File.join('', 'var' , 'transmission' , 'config' , 'overdrive.rb') ]
       options[:filter_paths] << File.join(ENV['HOME'], '.overdrive', 'overdrive.rb') if ENV['HOME']
       options[:filter_paths] += ENV['OVERDRIVE_RECIPES'].split(':') if ENV['OVERDRIVE_RECIPES']
       
