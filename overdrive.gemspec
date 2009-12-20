@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{overdrive}
-  s.version = "0.0.0"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Myles Eftos"]
@@ -14,8 +14,12 @@ Gem::Specification.new do |s|
   s.description = %q{An RSS frontend for transmissions. It defines a basic DSL that allows you decide what you do once the files have been downloaded}
   s.email = %q{myles@madpilot.com.au}
   s.executables = ["overdrive"]
+  s.extra_rdoc_files = [
+    "README.markdown"
+  ]
   s.files = [
-    "Rakefile",
+    "README.markdown",
+     "Rakefile",
      "VERSION",
      "bin/overdrive",
      "lib/dsl.rb",
@@ -23,8 +27,8 @@ Gem::Specification.new do |s|
      "lib/lexicon.rb",
      "lib/options.rb",
      "lib/torrent.rb",
-     "test/filter.rb",
      "test/fixtures/test.rss",
+     "test/recipe.rb",
      "test/test_helper.rb",
      "test/unit/dsl.rb",
      "test/unit/feed.rb",
@@ -37,8 +41,7 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.5}
   s.summary = %q{An RSS frontend for transmission}
   s.test_files = [
-    "test/filter.rb",
-     "test/test_helper.rb",
+    "test/test_helper.rb",
      "test/unit/feed.rb",
      "test/unit/lexicon.rb",
      "test/unit/dsl.rb",
