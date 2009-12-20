@@ -55,3 +55,7 @@ A sample recipe might look like this:
 You can get a full list of command line arguments by running
 
     overdrive -h
+
+You can get a list of DSL commands on the wiki
+
+http://wiki.github.com/madpilot/overdrive
