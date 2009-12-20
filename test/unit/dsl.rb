@@ -5,9 +5,17 @@ class DslTest < Test::Unit::TestCase
   
   context '' do
     setup do
-      @feed = Feed.new({})
+      @logger = Logger.new(File.open('/dev/null', 'w'))
+      
+      @options = { 
+        :logger => @logger, 
+        :filter_paths => filter_paths 
+      }
+      
+      @feed = Feed.new(@options)
+      @dsl = DSL.new(@options)
+      
       FakeWeb.register_uri(:get, "http://www.mytorrentsite.com/feed.rss", :body => bitme_rss)
-      @dsl = DSL.new(:filter => File.join(File.dirname(File.expand_path(__FILE__)), '..', 'filter.rb'))
     end
 
     context 'setup' do

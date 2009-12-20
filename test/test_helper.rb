@@ -21,4 +21,8 @@ module TestHelper
       rss.read  
     end
   end
+
+  def filter_paths
+    [ File.join(File.dirname(File.expand_path(__FILE__)), '..', 'receipe.rb') ]
+  end
 end

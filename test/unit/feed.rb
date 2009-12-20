@@ -10,7 +10,13 @@ class FeedTest < Test::Unit::TestCase
       DSL.any_instance.stubs(:feeds).returns(@feed_urls)
 
       @logger = Logger.new(File.open('/dev/null', 'w'))
-      @feed = Feed.new({ :on_top => true, :logger => @logger })
+      @feed = Feed.new(
+      { 
+        :on_top => true, 
+        :filter_paths => filter_paths, 
+        :logger => @logger 
+      })
+      
       feed = Feedzirra::Feed.parse(bitme_rss)
       feed_ret = {}
       @feed_urls.each { |f| feed_ret[f] = feed }
@@ -42,6 +48,7 @@ class FeedTest < Test::Unit::TestCase
     context 'update_feed' do
       should 'do nothing if there is no updated entries' do
         feed = Feedzirra::Feed.parse(bitme_rss)
+        feed.entries.stubs(:values).returns([])
         @feed.instance_variable_set(:@results, feed.entries)
         Feedzirra::Feed.stubs(:update).returns(feed)
         Feedzirra::Feed.stubs(:updated?).returns(false)
@@ -49,7 +56,7 @@ class FeedTest < Test::Unit::TestCase
         
         DSL.any_instance.expects(:perform_filter).never
         @logger.expects(:error).never
-        assert_equal 0, @feed.update_feeds
+        assert_equal 1, @feed.update_feeds
       end
     end
   end
