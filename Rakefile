@@ -13,7 +13,8 @@ begin
     s.add_dependency 'daemons'
     s.add_dependency 'transmission-client'
     s.add_dependency 'SyslogLogger'
-    
+    s.add_dependency 'pauldix-feedzirra'
+
     Jeweler::GemcutterTasks.new
   end
 rescue LoadError

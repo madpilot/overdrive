@@ -11,11 +11,11 @@ class DSL
     options[:filter_paths].each do |path|
       begin
         File.open(path, 'r') do |fh|
-          @options[:logger].info "Adding #{path} to recipe list"
+          @options[:logger].info "Adding #{path} to recipe list" if options[:verbose]
           contents += fh.read
         end
       rescue => e
-        @options[:logger].info "Couldn't add #{path} to recipe list: #{e}"
+        @options[:logger].info "Couldn't add #{path} to recipe list: #{e}" if options[:verbose]
       end
     end
 
