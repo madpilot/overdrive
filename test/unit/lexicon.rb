@@ -108,5 +108,14 @@ class LexiconTest < Test::Unit::TestCase
       assert_equal 4, parsed[:episode]
       assert !parsed[:high_def]     
     end
+
+    should 'parse Top Gear.14x05.720p HDTV x264-FoV' do
+      @item.stubs(:title).returns('Top Gear.14x05.720p HDTV x264-FoV')
+      parsed = Lexicon::parse(@item)
+      assert_equal 'Top Gear', parsed[:title]
+      assert_equal 14, parsed[:series]
+      assert_equal 5, parsed[:episode]
+      assert parsed[:high_def]     
+    end
   end
 end

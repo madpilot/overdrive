@@ -28,7 +28,7 @@ class Lexicon
           parsed[:series] = Regexp.last_match[1].to_i
           parsed[:episode] = Regexp.last_match[2].to_i
           state = :done
-        elsif token =~ /^(\d)x?(\d\d)$/i
+        elsif token =~ /^(\d\d?)x?(\d\d)$/i
           parsed[:series] = Regexp.last_match[1].to_i
           parsed[:episode] = Regexp.last_match[2].to_i
           state = :done
