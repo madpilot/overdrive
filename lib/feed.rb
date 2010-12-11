@@ -69,7 +69,9 @@ class Feed
   def check_downloads
     return if @options[:dry_run]
     @options[:logger].info "Checking Download Status" if @options[:verbose]
-    t = Transmission::Client.new(@options[:transmission_server], @options[:transmission_port])
-    @dsl.download_complete(t.torrents)
+    EventMachine.run do
+      t = Transmission::Client.new(@options[:transmission_server], @options[:transmission_port])
+      @dsl.download_complete(t.torrents)
+    end
   end
 end
